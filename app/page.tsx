@@ -1,345 +1,345 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Github, Linkedin, Mail, ExternalLink } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useState, useEffect } from "react"
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
+import CommandPalette from "../components/command-palette";
+import Link from "next/link";
+
+/* =========================
+   DATA (FROM YOUR RESUME)
+========================= */
 
 const skills = {
-  Frontend: ["HTML5", "CSS3", "Tailwind CSS", "JavaScript (ES6+)", "React.js", "Zustand", "ShadCN/UI"],
-  Backend: ["Node.js", "Express.js", "REST APIs", "JWT Auth", "Bcrypt.js"],
-  Databases: ["MongoDB", "PostgreSQL", "SQL", "Redis (Upstash)"],
-  "DevOps & Cloud": ["AWS (EC2, S3, RDS, IAM)", "Docker", "Vercel", "Neon DB"],
-}
+  Languages: ["JavaScript (ES6+)", "HTML5", "CSS3", "SQL"],
+  Frontend: [
+    "React.js",
+    "Tailwind CSS",
+    "Zustand",
+    "ShadCN/UI",
+    "Responsive Design",
+  ],
+  Backend: [
+    "Node.js",
+    "Express.js",
+    "RESTful APIs",
+    "JWT Authentication",
+    "Cookie-based Auth",
+  ],
+  Databases: ["MongoDB (Mongoose)", "PostgreSQL", "Redis (Upstash)"],
+  Tools: [
+    "Git",
+    "GitHub",
+    "Postman",
+    "VS Code",
+    "Vercel",
+    "Render",
+    "Cloudinary",
+    "AWS (EC2, S3, RDS)",
+  ],
+};
 
 const projects = [
   {
     title: "Resume Builder",
-    description: "Full-stack resume creation web app with customizable templates and export options",
-    features: [
-      "Live editing & preview",
-      "40% faster exports with html2pdf",
-      "PDF/DOCX/TXT export",
-      "Secure JWT auth",
-      "Mobile responsive",
+    description:
+      "Full-stack resume builder with live preview, templates, and secure authentication.",
+    bullets: [
+      "8+ professional resume templates with live preview editing",
+      "JWT + Bcrypt authentication with MongoDB Atlas",
+      "PDF / DOCX / TXT export using html2pdf",
+      "Cloudinary integration for profile image uploads",
+      "Fully responsive UI deployed on Vercel",
     ],
-    tech: ["MERN Stack", "Tailwind CSS", "html2pdf", "Vercel"],
+    impact: "40% faster document generation & optimized asset delivery",
+    tech: ["React", "Node.js", "MongoDB", "Tailwind", "Cloudinary"],
     link: "https://github.com/kartikey116/ResumeBuilder-Vrttantam",
-    highlight: true,
   },
   {
-    title: "ShopEase E-Commerce",
-    description: "Scalable e-commerce platform with real-time cart management and secure checkout",
-    features: [
-      "Real-time cart management",
-      "JWT + Redis session handling",
-      "Responsive design",
-      "99.9% uptime",
-      "Stripe integration",
+    title: "ShopEase – E-Commerce Platform",
+    description:
+      "Scalable MERN e-commerce platform with Redis caching and Stripe payments.",
+    bullets: [
+      "Product catalog, cart management & secure checkout",
+      "Redis (Upstash) for session & data caching",
+      "Stripe payment gateway integration",
+      "Cloudinary image optimization",
+      "Environment-based deployment on Vercel",
     ],
-    tech: ["MERN Stack", "Stripe", "Redis", "Vercel"],
+    impact: "Reduced DB load & improved response times",
+    tech: ["MERN", "Redis", "Stripe", "Cloudinary"],
     link: "https://github.com/kartikey116/E-commerce",
-    highlight: true,
   },
-]
+];
+
+/* =========================
+   PAGE
+========================= */
 
 export default function Home() {
-  const [isLoaded, setIsLoaded] = useState(false)
+  const { scrollYProgress } = useScroll();
+  const yParallax = useTransform(scrollYProgress, [0, 1], [0, -120]);
 
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
   useEffect(() => {
-    setIsLoaded(true)
-  }, [])
+    const move = (e: MouseEvent) =>
+      setMouse({
+        x: (e.clientX - window.innerWidth / 2) / 40,
+        y: (e.clientY - window.innerHeight / 2) / 40,
+      });
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md shadow-sm">
-        <div className="mx-auto max-w-4xl px-6 py-4 flex items-center justify-between">
-          <div className="text-xl font-bold animate-slide-in-right" style={{ animationDelay: "0s" }}>
-            KARTIKEY
-          </div>
-          <div className="flex items-center gap-6">
-            {["About", "Projects", "Skills", "Contact"].map((item, idx) => (
+    <main className="bg-grid min-h-screen">
+      <CommandPalette />
+      {/* BACKGROUND GLOWS */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute -top-40 -left-40 h-96 w-96 bg-cyan-500/30 blur-3xl rounded-full" />
+        <div className="absolute top-40 right-0 h-96 w-96 bg-purple-500/30 blur-3xl rounded-full" />
+      </div>
+
+      {/* NAVBAR */}
+      <nav className="sticky top-4 z-50 mx-auto max-w-5xl rounded-2xl backdrop-blur-xl bg-black/40 border border-white/10">
+        <div className="flex justify-between px-6 py-4">
+          <span className="font-bold text-cyan-400">KARTIKEY</span>
+          <div className="flex gap-6 text-sm text-gray-300">
+            {["About", "Projects", "Skills", "Contact"].map((i) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 animate-slide-in-right"
-                style={{ animationDelay: `${idx * 0.1}s` }}
+                key={i}
+                href={`#${i.toLowerCase()}`}
+                className="hover:text-cyan-400"
               >
-                {item}
+                {i}
               </a>
             ))}
+            
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-4xl px-6 py-20 md:py-32">
-          <div className="space-y-6">
-            <div className={isLoaded ? "animate-fade-in-up" : "opacity-0"} style={{ animationDelay: "0.1s" }}>
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                KARTIKEY
-              </h1>
-              <p className="text-xl text-muted-foreground mt-2">Full Stack Developer & MERN Stack Expert</p>
-            </div>
-            <p
-              className={`text-lg text-muted-foreground max-w-2xl leading-relaxed ${isLoaded ? "animate-fade-in-up" : "opacity-0"}`}
-              style={{ animationDelay: "0.2s" }}
-            >
-              I build scalable, high-performance web applications using modern technologies. Specialized in MERN stack,
-              cloud infrastructure, and creating seamless user experiences.
-            </p>
-            <div
-              className={`flex gap-4 pt-4 ${isLoaded ? "animate-fade-in-up" : "opacity-0"}`}
-              style={{ animationDelay: "0.3s" }}
-            >
-              <Button
-                asChild
-                className="gap-2 bg-primary hover:bg-primary/90 shadow-md hover:shadow-lg transition-shadow"
-              >
-                <Link href="mailto:Kartikeyu07@gmail.com">
-                  <Mail className="w-4 h-4" />
-                  Get in touch
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="gap-2 bg-white hover:bg-secondary shadow-md hover:shadow-lg transition-shadow border-border"
-              >
-                <a href="https://github.com/Kartikey116" target="_blank" rel="noopener noreferrer">
-                  <Github className="w-4 h-4" />
-                  GitHub
-                </a>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => {
+            const event = new KeyboardEvent("keydown", {
+              key: "k",
+              ctrlKey: true,
+            });
+            window.dispatchEvent(event);
+          }}
+          className="
+      px-4 py-2 rounded-xl
+      bg-black/60 backdrop-blur
+      border border-white/20
+      text-sm text-gray-300
+      hover:border-cyan-400 hover:text-cyan-400
+      transition
+    "
+        >
+          ⌘K / Ctrl+K
+        </button>
+      </div>
 
-      {/* About Section */}
-      <section
-        id="about"
-        className="border-b border-border bg-gradient-to-b from-background via-secondary/20 to-background"
-      >
-        <div className="mx-auto max-w-4xl px-6 py-20">
-          <h2
-            className={`text-3xl font-bold mb-8 ${isLoaded ? "animate-fade-in-up" : "opacity-0"}`}
-            style={{ animationDelay: "0.4s" }}
+      {/* HERO */}
+      <section className="max-w-5xl mx-auto px-6 pt-32 pb-24">
+        <div className="grid md:grid-cols-[1.2fr_1fr] gap-20 items-center">
+          {/* LEFT */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            About
-          </h2>
-          <div
-            className={`space-y-4 text-muted-foreground ${isLoaded ? "animate-fade-in-up" : "opacity-0"}`}
-            style={{ animationDelay: "0.5s" }}
-          >
-            <p className="leading-relaxed">
-              I'm a B-Tech student in Computer Science with specialization in Data Science at ABES Engineering College,
-              graduating in July 2027. Currently CGPA: 8.25/10. I'm passionate about building full-stack applications
-              that solve real problems.
+            <h1 className="text-6xl font-bold">KARTIKEY</h1>
+            <p className="mt-4 text-xl text-gray-400">
+              Full Stack Developer & MERN Stack Expert
             </p>
-            <p className="leading-relaxed">
-              My expertise spans frontend development with React and Tailwind CSS, backend systems with Node.js and
-              Express, and cloud infrastructure with AWS. I've built projects deployed on Vercel achieving 99.9% uptime
-              with optimized performance.
-            </p>
-            <p className="leading-relaxed">
-              Beyond development, I've participated in hackathons including PRAGYAN and Smart India Hackathon (4th
-              position), where I developed innovative solutions using AWS services and modern web technologies.
-            </p>
-          </div>
-        </div>
-      </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="border-b border-border">
-        <div className="mx-auto max-w-4xl px-6 py-20">
-          <h2
-            className={`text-3xl font-bold mb-12 ${isLoaded ? "animate-fade-in-up" : "opacity-0"}`}
-            style={{ animationDelay: "0.6s" }}
-          >
-            Featured Projects
-          </h2>
-          <div className="space-y-8">
-            {projects.map((project, idx) => (
-              <Card
-                key={idx}
-                className={`border-border bg-white hover:shadow-xl transition-all duration-300 hover:border-primary/30 ${isLoaded ? "animate-scale-in" : "opacity-0"}`}
-                style={{ animationDelay: `${0.7 + idx * 0.15}s` }}
+            <div className="mt-8 flex gap-4">
+              <a
+                className="animate-glow bg-cyan-400 text-black px-6 py-3 rounded-xl"
+                href="mailto:kartikeyu07@gmail.com"
               >
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <CardTitle className="text-2xl">{project.title}</CardTitle>
-                      <CardDescription className="text-base mt-2">{project.description}</CardDescription>
-                    </div>
-                    <Link
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:text-primary/80 transition-colors flex-shrink-0 mt-1 hover:scale-110 transform duration-300"
-                    >
-                      <ExternalLink className="w-5 h-5" />
-                    </Link>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-sm mb-3 text-foreground">Key Features</h4>
-                    <ul className="space-y-2">
-                      {project.features.map((feature, i) => (
-                        <li key={i} className="text-sm text-muted-foreground flex items-start gap-2 group">
-                          <span className="text-primary mt-1 group-hover:scale-125 transition-transform">→</span>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm mb-3 text-foreground">Tech Stack</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.map((tech, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium hover:bg-primary hover:text-white transition-colors transform hover:scale-105 duration-200"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                Get in touch
+              </a>
+              <a
+                href="/Kartikey_R_esume.pdf"
+                download
+                className="
+    border border-white/20
+    px-6 py-3 rounded-xl
+    hover:border-cyan-400
+    hover:text-cyan-400
+    transition-all
+  "
+              >
+                Download Resume
+              </a>
+            </div>
+          </motion.div>
+
+          {/* FLOATING CARDS */}
+          <div className="relative h-[380px] hidden md:block">
+            {[
+              { t: "Frontend", d: "React · Tailwind · UI", x: 0, y: 0 },
+              { t: "Backend", d: "Node · APIs · Auth", x: 80, y: 80 },
+              { t: "DevOps", d: "AWS · Docker · CI/CD", x: 20, y: 160 },
+            ].map((c, i) => (
+              <motion.div
+                key={i}
+                style={{
+                  top: c.y + mouse.y,
+                  left: c.x + mouse.x,
+                  y: yParallax,
+                }}
+                className="absolute w-64 p-5 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 animate-float"
+              >
+                <h4 className="font-semibold">{c.t}</h4>
+                <p className="text-sm text-gray-400 mt-2">{c.d}</p>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section
-        id="skills"
-        className="border-b border-border bg-gradient-to-b from-background via-secondary/20 to-background"
-      >
-        <div className="mx-auto max-w-4xl px-6 py-20">
-          <h2
-            className={`text-3xl font-bold mb-12 ${isLoaded ? "animate-fade-in-up" : "opacity-0"}`}
-            style={{ animationDelay: "1s" }}
-          >
-            Skills & Technologies
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {Object.entries(skills).map(([category, items], idx) => (
-              <div
-                key={category}
-                className={`p-6 rounded-lg bg-white border border-border hover:border-primary/30 transition-all duration-300 ${isLoaded ? "animate-scale-in" : "opacity-0"}`}
-                style={{ animationDelay: `${1.1 + idx * 0.1}s` }}
-              >
-                <h3 className="font-semibold text-lg mb-4 text-primary">{category}</h3>
-                <ul className="space-y-3">
-                  {items.map((skill, skillIdx) => (
-                    <li key={skillIdx} className="text-sm text-muted-foreground flex items-center gap-2 group">
-                      <span className="w-2 h-2 rounded-full bg-primary group-hover:scale-150 transition-transform"></span>
-                      <span className="group-hover:text-foreground transition-colors">{skill}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="border-b border-border">
-        <div className="mx-auto max-w-4xl px-6 py-20">
-          <h2
-            className={`text-3xl font-bold mb-8 ${isLoaded ? "animate-fade-in-up" : "opacity-0"}`}
-            style={{ animationDelay: "1.5s" }}
-          >
-            Let's Connect
-          </h2>
-          <p
-            className={`text-muted-foreground mb-8 max-w-2xl ${isLoaded ? "animate-fade-in-up" : "opacity-0"}`}
-            style={{ animationDelay: "1.6s" }}
-          >
-            I'm always open to new opportunities, collaborations, and interesting projects. Feel free to reach out!
+      {/* ABOUT (TERMINAL STYLE) */}
+      <section id="about" className="max-w-5xl mx-auto px-6 py-24">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="bg-black/60 backdrop-blur-xl border border-white/20 rounded-xl p-6 font-mono text-sm"
+        >
+          <p className="text-green-400">$ whoami</p>
+          <p className="text-gray-300 mt-2">
+            Kartikey — Full Stack Developer | MERN | AWS
           </p>
-          <div
-            className={`space-y-4 ${isLoaded ? "animate-fade-in-up" : "opacity-0"}`}
-            style={{ animationDelay: "1.7s" }}
-          >
-            <div className="flex items-center gap-3 group">
-              <Mail className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
-              <a href="mailto:Kartikeyu07@gmail.com" className="hover:text-primary transition-colors">
-                Kartikeyu07@gmail.com
-              </a>
-            </div>
-            <div className="flex items-center gap-3 group">
-              <Linkedin className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
-              <a
-                href="https://www.linkedin.com/in/kartikey-upadhyay/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-primary transition-colors"
-              >
-                linkedin.com/in/kartikey
-              </a>
-            </div>
-            <div className="flex items-center gap-3 group">
-              <Github className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
-              <a
-                href="https://github.com/Kartikey116"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-primary transition-colors"
-              >
-                github.com/Kartikey
-              </a>
-            </div>
-            <div className="flex items-center gap-3 group">
-              <span className="text-primary text-sm group-hover:scale-110 transition-transform origin-left">📱</span>
-              <a href="tel:+917302209937" className="hover:text-primary transition-colors">
-                +91 7302209937
-              </a>
-            </div>
-          </div>
+
+          <p className="text-green-400 mt-4">$ education</p>
+          <p className="text-gray-300">
+            B.Tech CSE (Data Science), ABES Engineering College <br />
+            CGPA: 8.23 / 10 (2023 – 2027)
+          </p>
+
+          <p className="text-green-400 mt-4">$ coursework</p>
+          <p className="text-gray-300">
+            DSA · DBMS · OS · CN · OOP · Web Development
+          </p>
+
+          <p className="text-green-400 mt-4">$ achievements</p>
+          <p className="text-gray-300">
+            Smart India Hackathon – 4th Position (Internal Round)
+          </p>
+        </motion.div>
+      </section>
+
+      {/* PROJECTS */}
+      <section id="projects" className="max-w-5xl mx-auto px-6 py-24">
+        <h2 className="text-3xl font-bold mb-12">Featured Projects</h2>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {projects.map((p, i) => (
+            <motion.div
+              key={p.title}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -8 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="p-6 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:border-cyan-400/60 transition-all"
+            >
+              <div className="flex justify-between">
+                <h3 className="text-xl font-semibold">{p.title}</h3>
+                <Link href={p.link} target="_blank">
+                  <ExternalLink className="w-5 h-5 text-cyan-400" />
+                </Link>
+              </div>
+
+              <p className="text-gray-400 mt-2">{p.description}</p>
+
+              <ul className="mt-4 space-y-2 text-sm text-gray-300">
+                {p.bullets.map((b) => (
+                  <li key={b}>→ {b}</li>
+                ))}
+              </ul>
+
+              <p className="text-cyan-400 text-sm mt-4">Impact: {p.impact}</p>
+
+              <div className="flex flex-wrap gap-2 mt-4">
+                {p.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="px-3 py-1 text-xs rounded-full bg-white/10 border border-white/20"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-b from-secondary/30 to-background border-t border-border">
-        <div className="mx-auto max-w-4xl px-6 py-12">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground">© 2025 KARTIKEY. All rights reserved.</p>
-            <div className="flex gap-6">
-              <a
-                href="https://github.com/Kartikey116"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors hover:scale-110 transform duration-300"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/kartikey-upadhyay/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors hover:scale-110 transform duration-300"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="mailto:Kartikeyu07@gmail.com"
-                className="text-muted-foreground hover:text-primary transition-colors hover:scale-110 transform duration-300"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
+      {/* SKILLS */}
+      <section id="skills" className="max-w-5xl mx-auto px-6 py-24">
+        <h2 className="text-3xl font-bold mb-12">Skills & Technologies</h2>
+
+        <div className="space-y-10">
+          {Object.entries(skills).map(([group, items], i) => (
+            <motion.div
+              key={group}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+            >
+              <h3 className="text-lg font-semibold mb-4 text-cyan-400">
+                {group}
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {items.map((skill) => (
+                  <span
+                    key={skill}
+                    className="px-4 py-2 rounded-full bg-white/10 backdrop-blur border border-white/20 text-sm hover:bg-cyan-400 hover:text-black transition-all"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </div>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" className="max-w-5xl mx-auto px-6 py-24">
+        <h2 className="text-3xl font-bold mb-6">Let’s Connect</h2>
+        <div className="space-y-4 text-gray-300">
+          <a
+            className="flex gap-3 hover:text-cyan-400"
+            href="mailto:kartikeyu07@gmail.com"
+          >
+            <Mail /> Kartikeyu07@gmail.com
+          </a>
+          <a
+            className="flex gap-3 hover:text-cyan-400"
+            href="https://github.com/Kartikey116"
+          >
+            <Github /> GitHub
+          </a>
+          <a
+            className="flex gap-3 hover:text-cyan-400"
+            href="https://www.linkedin.com/in/kartikey-upadhyay/"
+          >
+            <Linkedin /> LinkedIn
+          </a>
+        </div>
+      </section>
+
+      <footer className="py-12 text-center text-gray-500">
+        © 2025 Kartikey
       </footer>
     </main>
-  )
+  );
 }
