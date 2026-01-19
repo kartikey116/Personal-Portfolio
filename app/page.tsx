@@ -25,6 +25,7 @@ const skills = {
     "RESTful APIs",
     "JWT Authentication",
     "Cookie-based Auth",
+    "WebSockets"
   ],
   Databases: ["MongoDB (Mongoose)", "PostgreSQL", "Redis (Upstash)"],
   Tools: [
@@ -69,6 +70,49 @@ const projects = [
     impact: "Reduced DB load & improved response times",
     tech: ["MERN", "Redis", "Stripe", "Cloudinary"],
     link: "https://github.com/kartikey116/E-commerce",
+  },
+  {
+    title: "Motia – Customer Support System",
+    description:
+      "Real-time customer support system with WebSocket-based live chat.",
+    bullets: [
+      "Live chat using WebSockets",
+      "Ticket management system",
+      "Role-based authentication",
+    ],
+    impact: "Improved support efficiency",
+    tech: ["Node.js", "WebSocket", "MongoDB", "Docker"],
+    link: "https://github.com/kartikey116/Motia-Customer-Support",
+  },
+
+  {
+    title: "AI Chatbot",
+    description: "Conversational AI chatbot with intelligent response handling.",
+    bullets: [
+      "Context-aware conversations",
+      "AI API integration",
+      "Modern React UI",
+      "Cloud deployment",
+    ],
+    impact: "Automated user interaction",
+    tech: ["React", "Node.js", "AI"],
+    link: "https://github.com/kartikey116/ChatbotAI",
+  },
+
+  {
+    title: "Blockchain Blue Carbon Registry (SIH)",
+    description:
+      "Smart India Hackathon project for blockchain-based carbon credit tracking.",
+    bullets: [
+      "4th position among 100+ teams",
+      "REST APIs for carbon credit MRV",
+      "Backend lead using Node.js",
+      "Agile collaboration in 6-member team",
+      "Technical presentation to panel",
+    ],
+    impact: "National-level hackathon recognition",
+    tech: ["Node.js", "Express", "MongoDB", "Blockchain"],
+    link: "https://github.com/kartikey116/backendCarbon",
   },
 ];
 
@@ -152,7 +196,7 @@ export default function Home() {
           >
             <h1 className="text-6xl font-bold">KARTIKEY</h1>
             <p className="mt-4 text-xl text-gray-400">
-              Full Stack Developer & MERN Stack Expert
+              Full Stack Developer | MERN | Docker | WebSockets | AWS
             </p>
 
             <div className="mt-8 flex gap-4">
@@ -338,7 +382,7 @@ export default function Home() {
       </section>
 
       <footer className="py-12 text-center text-gray-500">
-        © 2025 Kartikey
+        © 2026 Kartikey
       </footer>
     </main>
   );
