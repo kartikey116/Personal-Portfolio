@@ -1,32 +1,26 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Poppins, JetBrains_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import SmoothScrollProvider from "../components/smooth-scroll-provider"
 import "./globals.css"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
+})
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+})
 
 export const metadata: Metadata = {
-  title: "KARTIKEY - Full Stack Developer",
+  title: "Kartikey — Full Stack Developer",
   description:
-    "Professional portfolio of KARTIKEY, a full-stack developer specializing in MERN stack, AWS, and modern web technologies.",
-  generator: "v0.app",
+    "Portfolio of Kartikey Upadhyay — Full Stack Developer specializing in MERN, AWS, and crafting intelligent digital experiences.",
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
+    icon: "/icon.svg",
     apple: "/apple-icon.png",
   },
 }
@@ -37,9 +31,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans antialiased`}>
-        {children}
+    <html lang="en" className={`${poppins.variable} ${mono.variable}`}>
+      <head>
+        <meta name="theme-color" content="#030712" />
+      </head>
+      <body className={`${poppins.className} antialiased`}>
+        <SmoothScrollProvider>
+          {children}
+        </SmoothScrollProvider>
         <Analytics />
       </body>
     </html>

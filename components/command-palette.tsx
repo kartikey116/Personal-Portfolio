@@ -52,7 +52,7 @@ export default function CommandPalette() {
         <>
           {/* BACKDROP */}
           <motion.div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/60 z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -69,8 +69,7 @@ export default function CommandPalette() {
               fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
               w-[90%] max-w-md
               rounded-xl
-              bg-black/80 backdrop-blur-xl
-              border border-white/20
+              bg-black/85 border border-white/20
               z-50
               p-4
             "
